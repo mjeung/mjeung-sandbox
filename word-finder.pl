@@ -3,6 +3,20 @@ use strict;
 use warnings;
 
 use Switch;
+use Text::Aspell;
+
+my $speller = Text::Aspell->new;
+die unless $speller;
+$speller->set_option('lang','en_US');
+$speller->set_option('sug-mode','fast');
+
+sub printIntro
+{
+  print "\n" .
+        "This script takes a string of numbers and prints a list \n" .
+        "of valid words that can be created with those numbers.\n" .
+        "\n";
+}
 
 sub translateNumber 
 {
@@ -27,36 +41,33 @@ sub translateNumber
 
 sub findPossibleWords
 {
-  my (@remainingDigits, @wordSoFar) = @_;
+  my ($ref_remainingDigits, $ref_wordSoFar) = @_;
+  my @remainingDigits = @{$ref_remainingDigits};
+  my @wordSoFar = @{$ref_wordSoFar};
 
-  print "Entering function with r: @remainingDigits, w: @wordSoFar";
-
-  if (scalar(@remainingDigits) == -1)
+  if (scalar(@remainingDigits) == 0)
   {
-     print "word: @wordSoFar\n";
+     my $result = join ("",@wordSoFar);
+     if ( $speller->check($result) )
+     {
+       print "word: $result\n";
+     }
   }
   else
   {
     my $nextDigit = $remainingDigits[0];
-    print scalar(@remainingDigits);
     shift(@remainingDigits);
-    print scalar(@remainingDigits);
     my @translationResult = translateNumber($nextDigit);
     foreach my $item (@translationResult)
     {
       my @localWord = @wordSoFar;
       push(@localWord,$item);
-      print "localWord: @localWord\n";
-      findPossibleWords(@remainingDigits,@localWord);
+      findPossibleWords(\@remainingDigits, \@localWord);
     }
   }
 }
 
-print "\n" .
-      "This script takes a string of numbers and prints a list \n" .
-      "of valid words that can be created with those numbers.\n" .
-      "\n";
-
+printIntro();
 print "Input: ";
 
 chomp(my $userInput = <>);
@@ -64,12 +75,8 @@ chomp(my $userInput = <>);
 if ( $userInput =~ m/^[0-9]+$/ )
 {
   my @charArray = split('',$userInput);
-
-  print "@charArray\n";
-
   my @progress = ();
-
-  findPossibleWords(@charArray,@progress);
+  findPossibleWords(\@charArray,\@progress);
 }
 else
 {
