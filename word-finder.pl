@@ -1,22 +1,41 @@
 #!/usr/bin/perl
+
+###############################################################################
+#
+# Given a string of digits, this script finds all valid words that the digits
+# could be translated into using a regular telephone keypad:
+#
+#
+#   1    2    3
+#       abc  def 
+#
+#   4    5    6
+#  ghi  jkl  mno 
+#
+#   7    8    9
+#  pqrs tuv  wxyz   
+#
+#
+# For example, "7672676" translates to "popcorn".
+#
+###############################################################################
+
 use strict;
 use warnings;
-
 use Switch;
 use Text::Aspell;
 
+### Global Spell Checker
 my $speller = Text::Aspell->new;
-die unless $speller;
-$speller->set_option('lang','en_US');
-$speller->set_option('sug-mode','fast');
 
-sub printIntro
+###############################################################################
+
+sub printUsage
 {
-  print "\n" .
-        "This script takes a string of numbers and prints a list \n" .
-        "of valid words that can be created with those numbers.\n" .
-        "\n";
+  print "usage: ./word-finder.pl <digits>\n";
 }
+
+###############################################################################
 
 sub translateNumber 
 {
@@ -30,7 +49,7 @@ sub translateNumber
     case(4) { @outputArray = ("g","h","i"); }
     case(5) { @outputArray = ("j","k","l"); }
     case(6) { @outputArray = ("m","n","o"); }
-    case(7) { @outputArray = ("p","q","r"); }
+    case(7) { @outputArray = ("p","q","r","s"); }
     case(8) { @outputArray = ("t","u","v"); }
     case(9) { @outputArray = ("w","x","y","z"); }
     else    { @outputArray = (); }
@@ -39,7 +58,9 @@ sub translateNumber
   return (@outputArray);
 }
 
-sub findPossibleWords
+###############################################################################
+
+sub printPossibleWords
 {
   my ($ref_remainingDigits, $ref_wordSoFar) = @_;
   my @remainingDigits = @{$ref_remainingDigits};
@@ -50,7 +71,7 @@ sub findPossibleWords
      my $result = join ("",@wordSoFar);
      if ( $speller->check($result) )
      {
-       print "word: $result\n";
+       print "  $result\n";
      }
   }
   else
@@ -62,23 +83,39 @@ sub findPossibleWords
     {
       my @localWord = @wordSoFar;
       push(@localWord,$item);
-      findPossibleWords(\@remainingDigits, \@localWord);
+      printPossibleWords(\@remainingDigits, \@localWord);
     }
   }
 }
 
-printIntro();
-print "Input: ";
+###############################################################################
 
-chomp(my $userInput = <>);
+### MAIN
 
-if ( $userInput =~ m/^[0-9]+$/ )
+die unless $speller;
+$speller->set_option('lang','en_US');
+$speller->set_option('sug-mode','fast');
+
+if ($#ARGV != 0)
 {
-  my @charArray = split('',$userInput);
+  printUsage();
+  print "\n";
+  exit;
+}
+
+my $digits = $ARGV[0];
+
+if ( $digits =~ m/^[0-9]+$/ )
+{
+  my @charArray = split('',$digits);
   my @progress = ();
-  findPossibleWords(\@charArray,\@progress);
+
+  print "\nPossible words for $digits:\n";
+  printPossibleWords(\@charArray,\@progress);
+  print "\n";
 }
 else
 {
-  print "\nMalformed input \"$userInput\", must be digits only\n\n";
+  printUsage();
+  print "Malformed input \"$digits\", must be digits only\n\n";
 }
