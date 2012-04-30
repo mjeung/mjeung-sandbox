@@ -32,7 +32,7 @@ sub translateNumber
     case(6) { @outputArray = ("m","n","o"); }
     case(7) { @outputArray = ("p","q","r"); }
     case(8) { @outputArray = ("t","u","v"); }
-    case(9) { @outputArray = ("w","x","y"); }
+    case(9) { @outputArray = ("w","x","y","z"); }
     else    { @outputArray = (); }
   }
 
