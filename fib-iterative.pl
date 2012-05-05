@@ -40,7 +40,16 @@ sub fib
   }
   else
   {
-    $ret = fib($n-1) + fib($n-2);
+    my $counter = 2;
+    $ret = 1;
+    my $prev2 = 1;
+    while ($counter < $n)
+    {
+      $counter++;
+      my $tmp = $ret;
+      $ret = $ret + $prev2;
+      $prev2 = $tmp;
+    }
   }
 
   $ret;
