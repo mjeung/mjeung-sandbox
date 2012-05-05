@@ -116,7 +116,7 @@ if ( $digits =~ m/^[0-9]+$/ )
   my @charArray = split('',$digits);
   my @progress = ();
 
-  print "\nPossible words for $digits:\n";
+  print "\nFinding possible words for $digits:\n";
   printPossibleWords(\@charArray,\@progress);
   print "\n";
 }
