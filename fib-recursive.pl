@@ -21,15 +21,29 @@ my $speller = Text::Aspell->new;
 sub printUsage
 {
   print "usage: ./fib.pl <number>\n";
-  print "\n";
 }
 
 ###############################################################################
 
-sub printUsage
+sub fib
 {
-  print "usage: ./fib.pl <number>\n";
-  print "\n";
+  my ($n) = @_;
+  my $ret;
+
+  if ($n == 0)
+  {
+    $ret = 0;
+  }
+  elsif ($n == 1 || $n == 2)
+  {
+    $ret = 1; 
+  }
+  else
+  {
+    $ret = fib($n-1) + fib($n-2);
+  }
+
+  $ret;
 }
 
 ###############################################################################
@@ -47,7 +61,7 @@ my $input = $ARGV[0];
 
 if ( $input =~ m/^[0-9]+$/ )
 {
-  print fib($input);
+  print "result: " . fib($input);
   print "\n";
 }
 else
