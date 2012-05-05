@@ -33,6 +33,12 @@ my $speller = Text::Aspell->new;
 sub printUsage
 {
   print "usage: ./word-finder.pl <digits>\n";
+  print "\n";
+  print "try:\n";
+  print "  ./word-finder.pl 7672676\n";
+  print "  ./word-finder.pl 266626333\n";
+  print "  ./word-finder.pl 3782254746368\n";
+  print "\n";
 }
 
 ###############################################################################
