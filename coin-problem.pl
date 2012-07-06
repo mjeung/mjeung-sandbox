@@ -3,6 +3,10 @@
 use strict;
 use warnings;
 
+my $globalTarget;
+my %hashNumberOfCoinsForValue = ();
+my %hashBestCoinCombinationForValue = ();
+
 ###############################################################################
 
 sub printUsage
@@ -14,7 +18,8 @@ sub printUsage
 
 sub minChange
 {
-  my ($m) = @_;
+  my ($m, $ref_SoFar) = @_;
+  my @soFar = @{$ref_SoFar};
   my $ret;
 
   $ret = 99999;
@@ -22,25 +27,74 @@ sub minChange
   {
     $ret = 0;
   }
+#  elsif (exists $hashNumberOfCoinsForValue{$m})
+#  elsif (exists $hashNumberOfCoinsForValue{$m} and exists $hashBestCoinCombinationForValue{$m})
+#  {
+#    $ret = $hashNumberOfCoinsForValue{$m};
+#    my @BestCoinCombination = @{$hashBestCoinCombinationForValue{$m}};
+#    print "Best For $m: @BestCoinCombination\n";
+#    push(@soFar,@BestCoinCombination);
+#  }
   else
   {
-    my $tmp_answer = 99999;
-    foreach my $coin (1, 3, 4, 5)
+    foreach my $coin (1, 3, 5)
     {
       if ($m >= $coin)
       {
-        my $return = (1 + minChange($m - $coin));
-        if ($tmp_answer > $return)
+        push(@soFar,$coin);
+        my $return = (1 + minChange($m - $coin, \@soFar));
+
+        my $hashKey = $globalTarget - ($m - $coin);
+        if (exists $hashBestCoinCombinationForValue{$hashKey})
         {
-          $tmp_answer = $return;
+          my @BestCoinCombination = @{$hashBestCoinCombinationForValue{$hashKey}};
+          if ( scalar(@BestCoinCombination) > scalar(@soFar) )
+          {
+            #print "Storing for $hashKey: @soFar\n";
+            my @copyOfSoFar = @soFar;
+            $hashBestCoinCombinationForValue{$hashKey} = \@copyOfSoFar;
+            #displayHash();   
+          }
+          else
+          {
+            my @copyOfSoFar = @soFar;
+           # print "Was going to store for $hashKey: @copyOfSoFar\n";
+          }
         }
+        else
+        {
+          #print "Storing for $hashKey: @soFar\n";
+          my @copyOfSoFar = @soFar;
+          $hashBestCoinCombinationForValue{$hashKey} = \@copyOfSoFar;
+        }
+
+        if ($ret > $return)
+        {
+          $ret = $return;
+          $hashNumberOfCoinsForValue{$m} = $ret;
+        }
+        pop(@soFar);
       }
     }
-
-    $ret = $tmp_answer;
   }
 
   $ret;
+}
+
+sub displayHash
+{
+  print "----------- \n";
+  foreach my $key ( keys %hashBestCoinCombinationForValue) 
+  {  
+     print "$key: ";
+     my @array = @{$hashBestCoinCombinationForValue{$key}};
+     foreach (@array)
+     {
+       print "$_ "
+     }
+     print "\n"
+  }
+  print "----------- \n";
 }
 
 ###############################################################################
@@ -55,10 +109,13 @@ if ($#ARGV != 0)
 }
 
 my $input = $ARGV[0];
+my @empty;
 
 if ( $input =~ m/^[0-9]+$/ )
 {
-  print "result: " . minChange($input);
+  $globalTarget = $input; 
+  print "result: " . minChange($input, \@empty) . "\n";
+  displayHash();   
   print "\n";
 }
 else
