@@ -1,4 +1,4 @@
-#!/Python27/python.exe
+#!/usr/bin/python
 import itertools
 
 def digitalRoot( numbers ):
