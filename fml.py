@@ -29,33 +29,51 @@ def allocate(free_list,used_list,x):
 
 	return -1;
 	
+def printPage(p):
+	print "Page:", p.start, "-", p.end
+	
 def free(free_list,used_list,addr):
 	success = False
 	for pageToDelete in used_list:
 		if pageToDelete.start == addr:
 			success = True
 			
+			ptd = pageToDelete
 			used_list.remove(pageToDelete)
-			
-			mergeUp = False
-			for page in free_list:
-				if (page.start - 1 == pageToDelete.end):
-					page.start = pageToDelete.start
-					mergeUp = True
-					pageToDelete = page
-					break;
 			
 			mergeDown = False
 			for page in free_list:
-				if (page.end + 1 == pageToDelete.start):
-					page.end = pageToDelete.end
+				if (page.end + 1 == ptd.start):
+					print "mergeDownCase:"
+					printPage(page)
+					print "to"
+					printPage(ptd)
+					page.end = ptd.end
 					mergeDown = True
+					ptd = page
 					break;
 			
-			if (mergeUp == False and mergeDown==False):
-				newPage = Page(pageToDelete.start,pageToDelete.end)
-				free_list.append(newPage)
+			mergeUp = False
+			for page in free_list:
+				if (page.start - 1 == ptd.end):
+					print "mergeUpCase"
+					printPage(page)
+					print "to"
+					printPage(ptd)
+					page.start = ptd.start
+					mergeUp = True
+					
+					if (mergeUp and mergeDown):
+						free_list.remove(ptd)
+					
+					break;
 			
+
+			
+			if (mergeUp == False and mergeDown==False):
+				newPage = Page(ptd.start,ptd.end)
+				free_list.append(newPage)
+						
 			break;
 
 	if success == False:
