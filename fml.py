@@ -44,10 +44,10 @@ def free(free_list,used_list,addr):
 			mergeDown = False
 			for page in free_list:
 				if (page.end + 1 == ptd.start):
-					print "mergeDownCase:"
-					printPage(page)
-					print "to"
-					printPage(ptd)
+					# print "mergeDownCase:"
+					# printPage(page)
+					# print "to"
+					# printPage(ptd)
 					page.end = ptd.end
 					mergeDown = True
 					ptd = page
@@ -56,10 +56,10 @@ def free(free_list,used_list,addr):
 			mergeUp = False
 			for page in free_list:
 				if (page.start - 1 == ptd.end):
-					print "mergeUpCase"
-					printPage(page)
-					print "to"
-					printPage(ptd)
+					# print "mergeUpCase"
+					# printPage(page)
+					# print "to"
+					# printPage(ptd)
 					page.start = ptd.start
 					mergeUp = True
 					
@@ -84,6 +84,9 @@ def free(free_list,used_list,addr):
 free_list = []
 used_list = []
 
+def getKey(page):
+	return page.start
+
 while(1):
 	user_input = raw_input('> ')
 	words = user_input.split()
@@ -94,6 +97,7 @@ while(1):
 	  size = words[1]
 	  p = Page(0,int(size) - 1)
 	  free_list = [p]
+	  used_list = []
 	  print "done"
 	  
 	elif command == "allocate":
@@ -109,11 +113,14 @@ while(1):
 	  free(free_list,used_list,addr)
 	  
 	elif command == "print":
+
+	  u = sorted(used_list, key=getKey)
+	  f = sorted(free_list, key=getKey)
 	  print "FREE SPACE"
-	  for page in free_list:
+	  for page in f:
 		print page.start,"-",page.end,"(size:",page.end-page.start+1,")"
 	  print "USED SPACE"
-	  for page in used_list:
+	  for page in u:
 		print page.start,"-",page.end,"(size:",page.end-page.start+1,")"
 	  
 	else:
