@@ -8,6 +8,7 @@ public:
   void start(int key, int expected_size);
   void append(int key, char * buffer, int buffer_size);
   bool is_done(int key);
+  char * get_buffer(int key);
 
 private:
   typedef std::map< int, Buffer_Struct > ASM_Map;

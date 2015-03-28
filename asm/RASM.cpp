@@ -33,3 +33,18 @@ bool RASM::is_done(int key)
   else
     return false;
 }
+
+char * RASM::get_buffer(int key)
+{
+  ASM_Map::iterator iter = m_asms.find(key);
+
+  if (iter != m_asms.end())
+  {
+    Buffer_Struct & buffer_struct = (iter->second);
+    return buffer_struct.buffer;
+  }
+  else
+  {
+    return NULL;
+  } 
+}

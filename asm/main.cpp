@@ -11,7 +11,7 @@ int main()
 
   for(int ii = 0; ii < 10; ++ii)
   {
-    buffer[ii] = ii;
+    buffer[ii] = 'a' + ii;
   }
 
   rasm.start(key, 30);
@@ -29,6 +29,13 @@ int main()
     std::cout << "fail" << std::endl;
 
   rasm.append(key, buffer, buffer_size);
+
+  char * ptr = rasm.get_buffer(key);
+
+  for (int ii = 0; ii < 30; ++ii)
+  {
+    std::cout << ii << ":" <<  ptr[ii] << std::endl;
+  }
 
   return 1;
 }
