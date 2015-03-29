@@ -18,20 +18,27 @@ void RASM::append(int key, char * buffer, int buffer_size)
     Buffer_Struct & buffer_struct = (iter->second);
     memcpy(&buffer_struct.buffer[current_size+1],buffer,buffer_size);
     m_asms[key].current_size += buffer_size;
-  }
 
-  if ( m_asms[key].current_size > m_asms[key].expected_size)
-  {
-   std::cout << "OVERFILL:" << key << std::endl;
+    if ( m_asms[key].current_size > m_asms[key].expected_size)
+    {
+     std::cout << "OVERFILL:" << key << std::endl;
+    }
   }
 }
 
 bool RASM::is_done(int key)
 {
-  if (m_asms[key].current_size >= m_asms[key].expected_size)
-    return true;
-  else
-    return false;
+  ASM_Map::iterator iter = m_asms.find(key);
+
+  if (iter != m_asms.end())
+  {
+    if (m_asms[key].current_size >= (m_asms[key].expected_size -1))
+      return true;
+    else
+      return false;
+  }
+
+  return false;
 }
 
 char * RASM::get_buffer(int key)
@@ -47,4 +54,9 @@ char * RASM::get_buffer(int key)
   {
     return NULL;
   } 
+}
+
+void RASM::remove(int key)
+{
+  m_asms.erase(key);
 }

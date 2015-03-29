@@ -32,10 +32,18 @@ int main()
 
   char * ptr = rasm.get_buffer(key);
 
-  for (int ii = 0; ii < 30; ++ii)
-  {
-    std::cout << ii << ":" <<  ptr[ii] << std::endl;
-  }
+  //for (int ii = 0; ii < 30; ++ii)
+  //{
+  //  std::cout << ii << ":" <<  ptr[ii] << std::endl;
+  //}
+
+ std::cout << "active nodes: " << rasm.active_nodes() << std::endl; 
+
+  rasm.remove(key);
+  rasm.append(key, buffer, buffer_size);
+  rasm.is_done(key);
+
+ std::cout << "active nodes: " << rasm.active_nodes() << std::endl; 
 
   return 1;
 }
