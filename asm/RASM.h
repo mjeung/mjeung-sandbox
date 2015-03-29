@@ -12,7 +12,7 @@ public:
   void start(int key, int expected_size);
   void append(int key, char * buffer, int buffer_size);
   bool is_done(int key);
-  const char * get_buffer(int key);
+  const ASM_Node * get_asm_node(int key);
   void remove(int key);
 
   int active_nodes() const;

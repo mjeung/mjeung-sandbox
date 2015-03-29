@@ -46,7 +46,7 @@ void RASM::append(int key, char * buffer, int buffer_size)
     else
     {
       ASM_Node & asm_node = (iter->second);
-      memcpy(&asm_node.buffer[current_size+1],buffer,buffer_size);
+      memcpy(&asm_node.buffer[current_size],buffer,buffer_size);
       m_asms[key].current_size += buffer_size;
     }
   }
@@ -62,7 +62,7 @@ bool RASM::is_done(int key)
 
   if (iter != m_asms.end())
   {
-    if (m_asms[key].current_size >= (m_asms[key].expected_size -1))
+    if (m_asms[key].current_size >= (m_asms[key].expected_size))
       return true;
     else
       return false;
@@ -75,13 +75,13 @@ bool RASM::is_done(int key)
   return false;
 }
 
-const char * RASM::get_buffer(int key)
+const ASM_Node * RASM::get_asm_node(int key)
 {
   ASM_Map::const_iterator iter = m_asms.find(key);
   if (iter != m_asms.end())
   {
     const ASM_Node & asm_node = (iter->second);
-    return asm_node.buffer;
+    return &asm_node;
   }
   else
   {

@@ -35,12 +35,16 @@ int main()
 
   rasm.append(key, buffer, buffer_size);
 
-  const char * ptr = rasm.get_buffer(key);
+  const ASM_Node * ptr = rasm.get_asm_node(key);
 
-  //for (int ii = 0; ii < 30; ++ii)
-  //{
-  //  std::cout << ii << ":" <<  ptr[ii] << std::endl;
-  //}
+  std::cout << "es: "<<  ptr->expected_size << std::endl;
+  std::cout << "cs: "<< ptr->current_size << std::endl;
+  for (int ii = 0; ii < ptr->current_size; ++ii)
+  {
+//    std::cout << ptr->buffer[ii];
+    std::cout << ii << ":" <<  ptr->buffer[ii] << std::endl;
+  }
+  std::cout << "" << std::endl;
 
   std::cout << "active nodes: " << rasm.active_nodes() << std::endl; 
 
@@ -53,7 +57,7 @@ int main()
 
   test1();
 
-  rasm.get_buffer(0);
+  rasm.get_asm_node(0);
 
   rasm.display_status();
 
