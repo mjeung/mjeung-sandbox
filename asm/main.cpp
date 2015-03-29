@@ -1,10 +1,15 @@
 #include <iostream>
 #include "RASM.h"
 
+RASM rasm; 
+
+void test1()
+{
+  rasm.start(910, 1700);
+}
+
 int main()
 {
-  RASM rasm; 
-
   int key = 900;
   char buffer[1500]; 
   char buffer_size = 10;
@@ -30,20 +35,27 @@ int main()
 
   rasm.append(key, buffer, buffer_size);
 
-  char * ptr = rasm.get_buffer(key);
+  const char * ptr = rasm.get_buffer(key);
 
   //for (int ii = 0; ii < 30; ++ii)
   //{
   //  std::cout << ii << ":" <<  ptr[ii] << std::endl;
   //}
 
- std::cout << "active nodes: " << rasm.active_nodes() << std::endl; 
+  std::cout << "active nodes: " << rasm.active_nodes() << std::endl; 
 
   rasm.remove(key);
+  rasm.remove(999);
   rasm.append(key, buffer, buffer_size);
   rasm.is_done(key);
 
- std::cout << "active nodes: " << rasm.active_nodes() << std::endl; 
+  std::cout << "active nodes: " << rasm.active_nodes() << std::endl; 
+
+  test1();
+
+  rasm.get_buffer(0);
+
+  rasm.display_status();
 
   return 1;
 }
