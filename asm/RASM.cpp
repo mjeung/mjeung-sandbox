@@ -37,14 +37,17 @@ void RASM::append(int key, char * buffer, int buffer_size)
   if (iter != m_asms.end())
   {
     int current_size = iter->second.current_size;
-    ASM_Node & asm_node = (iter->second);
-    memcpy(&asm_node.buffer[current_size+1],buffer,buffer_size);
-    m_asms[key].current_size += buffer_size;
-
-    if ( m_asms[key].current_size > m_asms[key].expected_size)
+    int expected_size = iter->second.expected_size;
+    if ( current_size + buffer_size > expected_size)
     {
       std::cout << "OVERFILL:" << key << std::endl;
       ++m_node_overfill;
+    }
+    else
+    {
+      ASM_Node & asm_node = (iter->second);
+      memcpy(&asm_node.buffer[current_size+1],buffer,buffer_size);
+      m_asms[key].current_size += buffer_size;
     }
   }
   else
