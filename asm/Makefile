@@ -1,2 +1,2 @@
 all:
-	g++ main.cpp RASM.cpp Buffer_Struct.cpp -o main.out
+	g++ main.cpp RASM.cpp ASM_Node.cpp -o main.out

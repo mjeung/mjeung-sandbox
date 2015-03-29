@@ -1,4 +1,7 @@
-#include "Buffer_Struct.h"
+#ifndef RASM_H
+#define RASM_H
+
+#include "ASM_Node.h"
 #include <map>
 
 class RASM
@@ -14,7 +17,9 @@ public:
   int active_nodes() { return m_asms.size(); }
 
 private:
-  typedef std::map< int, Buffer_Struct > ASM_Map;
+  typedef std::map< int, ASM_Node > ASM_Map;
   ASM_Map m_asms;
 
 };
+
+#endif
