@@ -1,63 +1,33 @@
 #include <iostream>
 
 #include "Lego.h"
-
-class ConcreteLego : public Lego<int,std::string>
-{
-    public:
-      void doSomething();
-};
-
-void ConcreteLego::doSomething()
-{
-  // Developer writes this
-
-  std::cout << "CONCRETE LEGO DO SOMETHING" << std::endl;
-  input = 50;
-  output = "string output";
-
-  std::cout << "int input :"  << input << std::endl;
-  std::cout << "string output:"  << output << std::endl;
-}
+#include "SSLego.h"
+#include "SQLego.h"
+#include "QSLego.h"
+#include "QQLego.h"
 
 int main()
 {
-    Lego<int,int> l1;
-    std::cout << "Lego<int,int>" << std::endl;
-    l1.describeOutput();
-    l1.subscribe();
-    l1.doSomething();
+    SSLego ssLego;
+    SQLego sqLego;
+    QQLego qqLego;
+    QSLego qsLego;
 
-    std::cout << "-----" << std::endl;
+    std::cout << std::endl; 
+    std::cout << "Doing wiring..." << std::endl;
+    // subscribe backwards: SS <--3-- SQ <--2-- QQ <--1-- QS
+    qsLego.subscribe(&(qqLego.output));  // 1
+    qqLego.subscribe(&(sqLego.output));  // 2
+    sqLego.subscribe(&(ssLego.output));  // 3
+    std::cout << std::endl; 
 
-    Lego<int,std::string> l2;
-    std::cout << "Lego<int,string>" << std::endl;
-    l2.describeOutput();
-    l2.subscribe();
-    l2.doSomething();
-
-    std::cout << "-----" << std::endl;
-
-    Lego<std::string,int> l3;
-    std::cout << "Lego<string,int>" << std::endl;
-    l3.describeOutput();
-    l3.subscribe();
-    l3.doSomething();
-
-    std::cout << "-----" << std::endl;
-
-    Lego<std::string,std::string> l4;
-    std::cout << "Lego<string,string>" << std::endl;
-    l4.describeOutput();
-    l4.subscribe();
-    l4.doSomething();
-
-    std::cout << "-----" << std::endl;
-
-    ConcreteLego concrete;
-    concrete.describeOutput();
-    concrete.subscribe();
-    concrete.doSomething();
+    ssLego.doSomething();
+    std::cout << "---" << std::endl;
+    sqLego.doSomething();
+    std::cout << "---" << std::endl;
+    qqLego.doSomething();
+    std::cout << "---" << std::endl;
+    qsLego.doSomething();
 
     return 1;
 }

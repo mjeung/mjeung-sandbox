@@ -1,3 +1,6 @@
+#ifndef LEGO_H
+#define LEGO_H
+
 #include <iostream>
 #include <string>
 
@@ -5,42 +8,47 @@ template <typename InputType = int, typename OutputType = int>
 class Lego
 {
   public:
-   void subscribe();
+   void subscribe(InputType * upstream);
    void describeOutput();
    void doSomething();
 
-  protected:
-   InputType input;
+   InputType * input;
    OutputType output;
 };
 
 // -------------------------
 
 template <>
-void Lego<int,int>::subscribe()
+void Lego<int,int>::subscribe(int * upstream)
 {
   std::cout << "<int,int> Subscribing to int type"  << std::endl;
+  input = upstream;
 } 
 
 template <>
-void Lego<int,std::string>::subscribe()
+void Lego<int,std::string>::subscribe(int * upstream)
 {
   std::cout << "<int,string> Subscribing to int type"  << std::endl;
+  input = upstream;
 } 
 
 template <>
-void Lego<std::string,int>::subscribe()
+void Lego<std::string,int>::subscribe(std::string * upstream)
 {
   std::cout << "<string,int> Subscribing to string type"  << std::endl;
+  input = upstream;
 } 
 
 template <>
-void Lego<std::string,std::string>::subscribe()
+void Lego<std::string,std::string>::subscribe(std::string * upstream)
 {
   std::cout << "<string,string> Subscribing to string type"  << std::endl;
+  input = upstream;
 } 
 
-// -------------------------
+// -----------------------------
+// --- DEBUG FUNCTIONS BELOW ---
+// -----------------------------
 
 template <>
 void Lego<int,int>::describeOutput()
@@ -66,54 +74,38 @@ void Lego<std::string,std::string>::describeOutput()
   std::cout << "<string,string> My output type is string"  << std::endl;
 } 
 
-// -------------------------
+// ---------------------------------------------
+// --- Vestigial Functions, no longer needed ---
+// ---------------------------------------------
 
+/* 
 template <>
 void Lego<int,int>::doSomething()
 {
-  // Test only, normally the child overrides this
-  input = 1;
-  input = input * 50;
-  output = input + 5000;
-
-  std::cout << "PARENT DO SOMETHING"  << std::endl;
-  std::cout << "input:"  << input << std::endl;
-  std::cout << "output:"  << output << std::endl;
+  // Child should override.
+  exit(1);
 } 
 
 template <>
 void Lego<int,std::string>::doSomething()
 {
-  // Test only, normally the child overrides this
-  input = 1;
-  input = input * 50;
-  output = "string output, input was " + std::to_string(input);
-
-  std::cout << "PARENT DO SOMETHING"  << std::endl;
-  std::cout << "input:"  << input << std::endl;
-  std::cout << "output:"  << output << std::endl;
+  // Child should override.
+  exit(1);
 } 
 
 template <>
 void Lego<std::string,int>::doSomething()
 {
-  // Test only, normally the child overrides this
-  input = "string input";
-  output = 50;
-
-  std::cout << "PARENT DO SOMETHING"  << std::endl;
-  std::cout << "input:"  << input << std::endl;
-  std::cout << "output:"  << output << std::endl;
+  // Child should override.
+  exit(1);
 }
 
 template <>
 void Lego<std::string,std::string>::doSomething()
 {
-  // Test only, normally the child overrides this
-  input = "string input";
-  output = "string output";
-
-  std::cout << "PARENT DO SOMETHING"  << std::endl;
-  std::cout << "input:"  << input << std::endl;
-  std::cout << "output:"  << output << std::endl;
+  // Child should override.
+  exit(1);
 }
+*/
+
+#endif
